@@ -6,62 +6,75 @@
 <div class="min-h-screen bg-gray-100 py-12">
     <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="bg-white rounded-lg shadow-lg p-8">
-            <div class="text-center mb-8">
-                <h1 class="text-2xl font-bold text-gray-900 mb-4">Confirmation de votre abonnement</h1>
-                <p class="text-gray-600">Vous avez choisi le {{ pack_name }}</p>
-            </div>
+            {% if pack %}
+                <div class="text-center mb-8">
+                    <h1 class="text-2xl font-bold text-gray-900 mb-4">Confirmation de votre abonnement</h1>
+                    <p class="text-gray-600">Vous avez choisi le {{ pack_name }}</p>
+                </div>
 
-            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-8">
-                <div class="flex items-start">
-                    <div class="flex-shrink-0">
-                        <svg class="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <div class="ml-3">
-                        <h3 class="text-sm font-medium text-blue-800">Informations importantes</h3>
-                        <div class="mt-2 text-sm text-blue-700">
-                            <ul class="list-disc pl-5 space-y-1">
-                                <li>Prix mensuel : {{ pack_price }}€</li>
-                                <li>Activation immédiate après confirmation</li>
-                                <li>Annulation possible à tout moment</li>
-                            </ul>
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-8">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-blue-800">Informations importantes</h3>
+                            <div class="mt-2 text-sm text-blue-700">
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>Prix mensuel : {{ pack_price }}€</li>
+                                    <li>Activation immédiate après confirmation</li>
+                                    <li>Annulation possible à tout moment</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <form method="post" action="{% url 'confirm_subscription' pack_type %}" class="space-y-6">
-                {% csrf_token %}
-                <div class="flex items-start">
-                    <div class="flex items-center h-5">
-                        <input id="terms" name="terms" type="checkbox" required
-                               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer">
+                <form method="post" action="{% url 'confirm_subscription' pack_type %}" class="space-y-6">
+                    {% csrf_token %}
+                    <div class="flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="terms" name="terms" type="checkbox" required
+                                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="terms" class="font-medium text-gray-700 cursor-pointer">
+                                Je confirme ma souscription à ce pack et j'accepte les conditions d'utilisation
+                            </label>
+                        </div>
                     </div>
-                    <div class="ml-3 text-sm">
-                        <label for="terms" class="font-medium text-gray-700 cursor-pointer">
-                            Je confirme ma souscription à ce pack et j'accepte les conditions d'utilisation
-                        </label>
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="text-{{ message.tags }}-600 text-sm">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="flex justify-between items-center mt-8">
+                        <a href="{% url 'subscription_packs' %}" 
+                           class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Retour aux packs
+                        </a>
+                        <button type="submit"
+                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Confirmer mon abonnement
+                        </button>
                     </div>
-                </div>
-
-                {% if error %}
-                <div class="text-red-600 text-sm">
-                    {{ error }}
-                </div>
-                {% endif %}
-
-                <div class="flex items-center justify-between mt-8">
+                </form>
+            {% else %}
+                <div class="text-center">
+                    <h2 class="text-xl font-semibold text-red-600 mb-4">Pack d'abonnement non trouvé</h2>
+                    <p class="text-gray-600 mb-6">Le pack que vous avez sélectionné n'est pas disponible.</p>
                     <a href="{% url 'subscription_packs' %}" 
-                       class="text-sm font-medium text-blue-600 hover:text-blue-500">
-                        Retour aux packs
+                       class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Retour aux packs disponibles
                     </a>
-                    <button type="submit"
-                            class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200">
-                        Confirmer mon abonnement
-                    </button>
                 </div>
-            </form>
+            {% endif %}
         </div>
     </div>
 </div>

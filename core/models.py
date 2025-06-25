@@ -58,6 +58,8 @@ class Notification(models.Model):
     """Modèle pour les notifications utilisateur et admin"""
     NOTIFICATION_TYPES = [
         ('subscription', 'Nouvelle souscription'),
+        ('cancellation', 'Annulation d\'abonnement'),
+        ('support', 'Message support'),
         ('system', 'Notification système'),
         ('user', 'Notification utilisateur'),
     ]
@@ -89,3 +91,35 @@ class Notification(models.Model):
 
     def __str__(self):
         return f'{self.title} - {self.user.username}'
+
+class SupportMessage(models.Model):
+    """Modèle pour les messages de support"""
+    user = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name='support_messages'
+    )
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_resolved = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'Support - {self.user.username} - {self.created_at.strftime("%d/%m/%Y %H:%M")}'
+
+    def save(self, *args, **kwargs):
+        # Créer une notification pour les administrateurs lors de la création d'un nouveau message
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+
+        if is_new:
+            admin_users = CustomUser.objects.filter(role='admin')
+            for admin in admin_users:
+                Notification.objects.create(
+                    user=admin,
+                    type='support',
+                    title='Nouveau message support',
+                    message=f'Message de {self.user.get_full_name() or self.user.username} : {self.message[:100]}...',
+                )
