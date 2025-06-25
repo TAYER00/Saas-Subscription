@@ -1,0 +1,84 @@
+{% extends 'core/base.html' %}
+{% load custom_filters %}
+
+{% block title %}Dashboard Utilisateur{% endblock %}
+
+{% block content %}
+<div class="space-y-6 fade-in">
+    <!-- En-tête du dashboard -->
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h1 class="text-2xl font-bold text-gray-800">Bienvenue, {{ user.username }} !</h1>
+        <p class="text-gray-600 mt-2">Voici votre espace personnel</p>
+    </div>
+
+    <!-- État de l'abonnement -->
+    <div class="bg-white p-6 rounded-lg shadow-lg hover-scale">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">État de votre abonnement</h2>
+        
+        {% if subscription.is_active %}
+            <div class="bg-green-100 border-l-4 border-green-500 p-4">
+                <p class="text-green-700">Votre abonnement {{ subscription.pack.get_name_display }} est actif</p>
+                <p class="text-sm text-green-600 mt-2">Profitez de toutes les fonctionnalités premium !</p>
+            </div>
+        {% else %}
+            <div class="bg-yellow-100 border-l-4 border-yellow-500 p-4">
+                <p class="text-yellow-700">Votre abonnement n'est pas encore actif</p>
+                <a href="{% url 'subscription_packs' %}" 
+                   class="inline-block mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-200">
+                    Découvrir nos packs
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Notifications -->
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Notifications récentes</h2>
+        
+        {% if notifications %}
+            <div class="space-y-4">
+                {% for notification in notifications %}
+                    <!-- <div class="bg-blue-50 p-4 rounded-lg slide-in" style="animation-delay: {{ forloop.counter|multiply:0.1 }}s"> -->
+                    <div class="bg-blue-50 p-4 rounded-lg slide-in"  style="animation-delay: 0.2s;">
+
+
+                        
+                        <h3 class="font-medium text-blue-800">{{ notification.title }}</h3>
+                        <p class="text-blue-600 mt-1">{{ notification.message }}</p>
+                        <div class="mt-2 text-right">
+                            <a href="{% url 'mark_notification_read' notification.id %}" 
+                               class="text-sm text-blue-500 hover:text-blue-700 hover-scale inline-block">
+                                Marquer comme lu
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-gray-600">Aucune nouvelle notification</p>
+        {% endif %}
+    </div>
+
+    <!-- Statistiques -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white p-6 rounded-lg shadow-lg hover-scale">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Votre activité</h2>
+            <div class="text-4xl font-bold text-blue-500">0</div>
+            <p class="text-gray-600 mt-2">Actions effectuées</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-lg hover-scale">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Prochaine étape</h2>
+            <p class="text-gray-600">
+                {% if not subscription.is_active %}
+                    <a href="{% url 'subscription_packs' %}" class="text-blue-600 hover:text-blue-800">
+                        Activez votre abonnement
+                    </a> pour accéder à toutes les fonctionnalités
+                {% else %}
+                    Explorez nos fonctionnalités premium
+                {% endif %}
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Choisir un abonnement{% endblock %}
+
+{% block content %}
+<div class="py-12 bg-gray-100 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h1 class="text-3xl font-bold text-gray-900 mb-4">Choisissez votre pack</h1>
+            <p class="text-lg text-gray-600">Sélectionnez l'offre qui correspond le mieux à vos besoins</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- Pack Simple -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+                <div class="px-6 py-8">
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-4">Pack Simple</h3>
+                    <div class="text-4xl font-bold text-blue-600 mb-6">19.99€<span class="text-lg text-gray-500">/mois</span></div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center">
+                            <svg class="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Accès aux fonctionnalités de base
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Support par email
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Mises à jour mensuelles
+                        </li>
+                    </ul>
+                    <form action="{% url 'confirm_subscription' 'simple' %}" method="get" class="text-center">
+                        <button type="submit" class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200">
+                            Choisir ce pack
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Pack Premium -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1 border-2 border-blue-500">
+                <div class="px-6 py-8">
+                    <div class="absolute top-0 right-0 bg-blue-500 text-white px-4 py-1 rounded-bl-lg">Populaire</div>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-4">Pack Premium</h3>
+                    <div class="text-4xl font-bold text-blue-600 mb-6">49.99€<span class="text-lg text-gray-500">/mois</span></div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center">
+                            <svg class="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Toutes les fonctionnalités du pack Simple
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Support prioritaire 24/7
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Fonctionnalités avancées
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Mises à jour hebdomadaires
+                        </li>
+                    </ul>
+                    <form action="{% url 'confirm_subscription' 'premium' %}" method="get" class="text-center">
+                        <button type="submit" class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200">
+                            Choisir ce pack
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
